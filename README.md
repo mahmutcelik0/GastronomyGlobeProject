@@ -13,6 +13,7 @@ validated olan bir yapı olacak
 
 role olarak admin ve user olacak şimdilik ikisi de aynı yetkiye sahip olacak
 
+## ⭐CONTENT
 **Overview:**
 Create a web application that allows users to share, discover, and rate recipes. Users can register, log in, and upload their favorite recipes to the platform. Other users can browse and search for recipes, give ratings, and leave comments. The application will have user authentication, a database to store recipes and user data, and a user-friendly interface for seamless recipe sharing.
 

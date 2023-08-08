@@ -8,10 +8,10 @@ import com.globe.gastronomy.backend.model.Role;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.repository.UserRepository;
 import com.globe.gastronomy.backend.utils.LogUtil;
-import com.globe.gastronomy.backend.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +24,13 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final PasswordUtil passwordUtil;
+    private final PasswordEncoder passwordEncoder;
 
     private final RoleService roleService;
 
-    @Autowired
-    private PasswordEncoder encoder;
-
-    public UserService(UserRepository userRepository, PasswordUtil passwordUtil, RoleService roleService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
-        this.passwordUtil = passwordUtil;
+        this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
     }
 
@@ -71,9 +68,7 @@ public class UserService {
 
         User newUser = new UserDtoPopulator().reverseConverter(userDto);
 
-        passwordUtil.prepareUserPassword(newUser, userDto);
-
-        newUser.setPassword(encoder.encode(userDto.getPassword()));
+        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         try {
             roleService.setUserRoles(newUser, userDto);
@@ -111,7 +106,7 @@ public class UserService {
 
         userRepository.save(user.get());
 
-        return new ResponseEntity<>("USER UPDATED SUCCESSFULLY",HttpStatus.OK);
+        return new ResponseEntity<>("USER UPDATED SUCCESSFULLY", HttpStatus.OK);
     }
 
     public ResponseEntity deleteUser(String email) {
@@ -121,6 +116,12 @@ public class UserService {
 
         userRepository.delete(user.get());
 
-        return new ResponseEntity<>("USER REMOVED SUCCESSFULLY",HttpStatus.OK);
+        return new ResponseEntity<>("USER REMOVED SUCCESSFULLY", HttpStatus.OK);
+    }
+
+    public User getUserByEmail(String email) throws UsernameNotFoundException {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
     }
 }

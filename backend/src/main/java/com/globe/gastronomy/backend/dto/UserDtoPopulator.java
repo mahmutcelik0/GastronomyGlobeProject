@@ -2,6 +2,8 @@ package com.globe.gastronomy.backend.dto;
 
 import com.globe.gastronomy.backend.model.User;
 
+import java.util.stream.Collectors;
+
 public class UserDtoPopulator extends AbstractPopulator<User, UserDto> {
     @Override
     public UserDto generateTarget() {
@@ -19,7 +21,7 @@ public class UserDtoPopulator extends AbstractPopulator<User, UserDto> {
         userDto.setLastName(user.getLastName());
         userDto.setGender(user.getGender());
         userDto.setEmail(user.getEmail());
-
+        userDto.setRoles(user.getRoles().stream().map(e -> new RoleDtoPopulator().populate(e)).collect(Collectors.toSet()));
         return userDto;
     }
 
@@ -29,7 +31,7 @@ public class UserDtoPopulator extends AbstractPopulator<User, UserDto> {
         user.setLastName(userDto.getLastName());
         user.setGender(userDto.getGender());
         user.setEmail(userDto.getEmail());
-
+        user.setRoles(userDto.getRoles().stream().map(e -> new RoleDtoPopulator().reverseConverter(e)).collect(Collectors.toSet()));
         return user;
     }
 

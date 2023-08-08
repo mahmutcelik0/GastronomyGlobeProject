@@ -32,4 +32,14 @@ public class RoleApi {
     public ResponseEntity addNewRole(@RequestBody @Valid RoleDto roleDto){
         return roleService.addNewRole(roleDto);
     }
+
+    @PutMapping("/updateByName")
+    public ResponseEntity updateExistRole(@RequestParam String existRoleName,@RequestBody RoleDto newRole){
+        return roleService.updateExistRole(existRoleName,newRole);
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteRole(@RequestParam String roleName){
+        return roleService.deleteRole(roleName);
+    }
 }

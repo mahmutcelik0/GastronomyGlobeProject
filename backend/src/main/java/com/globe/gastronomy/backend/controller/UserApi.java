@@ -1,9 +1,13 @@
 package com.globe.gastronomy.backend.controller;
 
+import com.globe.gastronomy.backend.dto.RoleDto;
 import com.globe.gastronomy.backend.dto.UserDto;
 import com.globe.gastronomy.backend.exception.UserNotFoundException;
 import com.globe.gastronomy.backend.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +39,19 @@ public class UserApi {
         return userService.addNewUser(userDto);
     }
 
+    @PatchMapping("/addNewRole")
+    public ResponseEntity addNewRoleToUser(@RequestBody @Valid UserDto userDto, @RequestParam String roleName){
+        return userService.addNewRoleToUser(userDto,roleName);
+    }
+
+    @PatchMapping("/updateNameOfUser")
+    public ResponseEntity updateNameOfUser(@RequestBody @Valid UserDto userDto, @RequestParam String firstName, @RequestParam String lastName){
+        return userService.updateNameOfUser(userDto,firstName,lastName);
+    }
+
+    @DeleteMapping
+    public ResponseEntity deleteUserByEmail(@RequestParam @Email String email){
+        return userService.deleteUser(email);
+    }
 
 }

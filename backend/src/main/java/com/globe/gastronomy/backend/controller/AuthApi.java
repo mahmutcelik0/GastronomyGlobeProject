@@ -46,7 +46,7 @@ public class AuthApi {
         return ResponseEntity.ok(bearerToken);
     }
 
-    @PostMapping("/addNewUser")
+    @PostMapping("/register")
     public ResponseEntity addNewUser(@RequestBody UserDto userDto){
         return userService.addNewUser(userDto);
     }

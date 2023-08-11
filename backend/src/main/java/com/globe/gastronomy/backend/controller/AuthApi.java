@@ -2,8 +2,10 @@ package com.globe.gastronomy.backend.controller;
 
 import com.globe.gastronomy.backend.dto.BearerToken;
 import com.globe.gastronomy.backend.dto.LoginDto;
+import com.globe.gastronomy.backend.dto.UserDto;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.security.UsernamePasswordAuthenticationProvider;
+import com.globe.gastronomy.backend.service.UserService;
 import com.globe.gastronomy.backend.utils.JwtTokenUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthApi {
     private final UsernamePasswordAuthenticationProvider providerManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final UserService userService;
 
 
-    public AuthApi(UsernamePasswordAuthenticationProvider providerManager, JwtTokenUtil jwtTokenUtil) {
+    public AuthApi(UsernamePasswordAuthenticationProvider providerManager, JwtTokenUtil jwtTokenUtil, UserService userService) {
         this.providerManager = providerManager;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -40,5 +44,10 @@ public class AuthApi {
         BearerToken bearerToken = new BearerToken(accessToken,"Bearer ");
 
         return ResponseEntity.ok(bearerToken);
+    }
+
+    @PostMapping("/addNewUser")
+    public ResponseEntity addNewUser(@RequestBody UserDto userDto){
+        return userService.addNewUser(userDto);
     }
 }

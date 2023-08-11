@@ -1,15 +1,15 @@
 package com.globe.gastronomy.backend.controller;
 
-import com.globe.gastronomy.backend.dto.RoleDto;
+import com.globe.gastronomy.backend.dto.request.ChangePasswordRequest;
 import com.globe.gastronomy.backend.dto.UserDto;
+import com.globe.gastronomy.backend.dto.response.ChangeRequestResponse;
 import com.globe.gastronomy.backend.exception.UserNotFoundException;
 import com.globe.gastronomy.backend.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -52,6 +52,22 @@ public class UserApi {
     @DeleteMapping
     public ResponseEntity deleteUserByEmail(@RequestParam @Email String email){
         return userService.deleteUser(email);
+    }
+
+
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam MultipartFile image){
+        return userService.uploadImage(image);
+    }
+
+    @GetMapping("/getImage")
+    public ResponseEntity<?> getImage(){
+        return userService.getImage();
+    }
+
+    @PatchMapping("/changePassword")
+    public ResponseEntity<ChangeRequestResponse> changePassword(@RequestBody @Valid ChangePasswordRequest request){
+        return userService.changePassword(request);
     }
 
 }

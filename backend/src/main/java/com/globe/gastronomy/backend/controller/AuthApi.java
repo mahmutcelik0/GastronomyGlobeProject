@@ -3,6 +3,7 @@ package com.globe.gastronomy.backend.controller;
 import com.globe.gastronomy.backend.dto.BearerToken;
 import com.globe.gastronomy.backend.dto.LoginDto;
 import com.globe.gastronomy.backend.dto.UserDto;
+import com.globe.gastronomy.backend.dto.UserDtoPopulator;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.security.UsernamePasswordAuthenticationProvider;
 import com.globe.gastronomy.backend.service.UserService;
@@ -39,7 +40,7 @@ public class AuthApi {
 
         User user = (User) authentication.getPrincipal();
 
-        String accessToken = jwtTokenUtil.generateToken(user.getEmail(),user.getRoles());
+        String accessToken = jwtTokenUtil.generateToken(new UserDtoPopulator().populate(user),user.getRoles());
 
         BearerToken bearerToken = new BearerToken(accessToken,"Bearer ");
 

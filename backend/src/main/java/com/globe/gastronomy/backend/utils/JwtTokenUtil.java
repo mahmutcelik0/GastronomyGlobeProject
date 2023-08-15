@@ -1,5 +1,7 @@
 package com.globe.gastronomy.backend.utils;
 
+import com.globe.gastronomy.backend.dto.UserDto;
+import com.globe.gastronomy.backend.dto.UserDtoPopulator;
 import com.globe.gastronomy.backend.model.Role;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +26,8 @@ public class JwtTokenUtil {
     private Long expiration;
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        String claims = extractClaim(token, Claims::getSubject);
+        return new UserDtoPopulator().stringConverter(claims).getEmail();
     }
 
     public Claims extractAllClaims(String token) {
@@ -49,10 +52,10 @@ public class JwtTokenUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String email, Set<Role> roles) {
+    public String generateToken(UserDto userDto, Set<Role> roles) {
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(userDto.toString())
                 .claim("role", roles)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(Date.from(Instant.now().plus(expiration, ChronoUnit.MILLIS)))

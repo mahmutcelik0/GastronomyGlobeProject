@@ -27,4 +27,14 @@ public class UserDto {
     private String password;
 
     private Set<RoleDto> roles;
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

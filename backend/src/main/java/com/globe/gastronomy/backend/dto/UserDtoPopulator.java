@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.globe.gastronomy.backend.constants.Gender;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.utils.LogUtil;
 import nonapi.io.github.classgraph.json.JSONDeserializer;
@@ -11,6 +12,8 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class UserDtoPopulator extends AbstractPopulator<User, UserDto> {
@@ -45,20 +48,26 @@ public class UserDtoPopulator extends AbstractPopulator<User, UserDto> {
     }
 
     public UserDto stringConverter(String userStr) {
-        try {
-            return UserDto.class.getConstructor(new Class[]{String.class}).newInstance(userStr);
+        String content = userStr.substring(userStr.indexOf("{") + 1, userStr.lastIndexOf("}"));
 
+        String[] keyValuePairs = content.split(", ");
+        Map<String, String> keyValueMap = new HashMap<>();
 
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+        for (String keyValuePair : keyValuePairs) {
+            String[] parts = keyValuePair.split("=");
+            String lastPart = parts[1].contains("'") ?
+                    parts[1].substring(parts[1].indexOf("'") + 1, parts[1].lastIndexOf("'")) :
+                    parts[1];
+            keyValueMap.put(parts[0], lastPart);
         }
+
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(keyValueMap.get("firstName"));
+        userDto.setLastName(keyValueMap.get("lastName"));
+        userDto.setGender(Gender.valueOf(keyValueMap.get("gender")));
+        userDto.setEmail(keyValueMap.get("email"));
+
+        return userDto;
+
     }
-
-
 }

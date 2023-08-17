@@ -14,6 +14,6 @@ ARG JAR_FILE=target/*.jar
 
 EXPOSE 8080
 
-COPY --from=build /build/libs/demo-1.jar app.jar
+COPY --from=build /target/backend-1.jar app.jar
 
 ENTRYPOINT ["java", "-jar","/app.jar"]

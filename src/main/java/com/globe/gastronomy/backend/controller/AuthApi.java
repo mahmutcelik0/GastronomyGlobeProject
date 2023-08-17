@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -40,15 +37,20 @@ public class AuthApi {
 
         User user = (User) authentication.getPrincipal();
 
-        String accessToken = jwtTokenUtil.generateToken(new UserDtoPopulator().populate(user),user.getRoles());
+        String accessToken = jwtTokenUtil.generateToken(new UserDtoPopulator().populate(user), user.getRoles());
 
-        BearerToken bearerToken = new BearerToken(accessToken,"Bearer ");
+        BearerToken bearerToken = new BearerToken(accessToken, "Bearer ");
 
         return ResponseEntity.ok(bearerToken);
     }
 
     @PostMapping("/register")
-    public ResponseEntity addNewUser(@RequestBody UserDto userDto){
+    public ResponseEntity addNewUser(@RequestBody UserDto userDto) {
         return userService.addNewUser(userDto);
+    }
+
+    @GetMapping("/hello")
+    public String getHello() {
+        return "HELLO";
     }
 }

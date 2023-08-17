@@ -8,5 +8,5 @@ FROM maven:3.6-jdk-11 as maven_build
 RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-alpine
 ARG JAR_FILE=target/*.jar
-COPY target/backend-1.jar app.jar
+COPY --from=build target/backend-1.jar app.jar
 ENTRYPOINT ["java", "-jar","/app.jar"]

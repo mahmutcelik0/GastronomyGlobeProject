@@ -51,6 +51,6 @@ public class AuthApi {
 
     @GetMapping("/hello")
     public String getHello() {
-        return "HELLO";
+        return "HELLOO";
     }
 }

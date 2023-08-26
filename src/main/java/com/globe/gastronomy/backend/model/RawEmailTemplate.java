@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "EMAIL_TEMPLATE")
+@Table(name = "RAW_EMAIL_TEMPLATE")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailTemplate {
+public class RawEmailTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "template_id")
@@ -21,6 +21,6 @@ public class EmailTemplate {
     private String templateName;
 
     private String templateLanguage;
-
+    @Column(name = "template_content",length = 5000)
     private String templateContent;
 }

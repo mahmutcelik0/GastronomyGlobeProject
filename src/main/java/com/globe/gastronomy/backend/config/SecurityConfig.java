@@ -17,7 +17,7 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter ;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -38,7 +38,7 @@ public class SecurityConfig {
                     return corsConfiguration;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request ->request
+                .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/**").authenticated() //.hasAnyRole("USER","ADMIN")
                         .requestMatchers("/auth/**").permitAll())
 
@@ -51,7 +51,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

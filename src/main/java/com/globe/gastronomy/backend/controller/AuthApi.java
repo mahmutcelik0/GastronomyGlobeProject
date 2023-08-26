@@ -1,9 +1,8 @@
 package com.globe.gastronomy.backend.controller;
 
-import com.globe.gastronomy.backend.dto.BearerToken;
-import com.globe.gastronomy.backend.dto.LoginDto;
-import com.globe.gastronomy.backend.dto.UserDto;
-import com.globe.gastronomy.backend.dto.UserDtoPopulator;
+import com.globe.gastronomy.backend.command.PasswordEmailResponse;
+import com.globe.gastronomy.backend.dto.*;
+import com.globe.gastronomy.backend.facade.EmailFacade;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.security.UsernamePasswordAuthenticationProvider;
 import com.globe.gastronomy.backend.service.UserService;
@@ -21,12 +20,13 @@ public class AuthApi {
     private final UsernamePasswordAuthenticationProvider providerManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserService userService;
+    private final EmailFacade emailFacade;
 
-
-    public AuthApi(UsernamePasswordAuthenticationProvider providerManager, JwtTokenUtil jwtTokenUtil, UserService userService) {
+    public AuthApi(UsernamePasswordAuthenticationProvider providerManager, JwtTokenUtil jwtTokenUtil, UserService userService, EmailFacade emailFacade) {
         this.providerManager = providerManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userService = userService;
+        this.emailFacade = emailFacade;
     }
 
     @PostMapping("/login")
@@ -52,5 +52,10 @@ public class AuthApi {
     @GetMapping("/hello")
     public String getHello() {
         return "HELLOO";
+    }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<PasswordEmailResponse> forgotPasswordEmail(@RequestBody ForgotPasswordDto forgotPasswordDto) {
+        return ResponseEntity.ok(emailFacade.sendForgotPasswordEmail(forgotPasswordDto.getLanguage(), forgotPasswordDto.getEmail()));
     }
 }

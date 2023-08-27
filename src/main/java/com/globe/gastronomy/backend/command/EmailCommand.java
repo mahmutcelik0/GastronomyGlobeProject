@@ -5,6 +5,7 @@ import com.globe.gastronomy.backend.email.EmailTemplateFactory;
 import com.globe.gastronomy.backend.model.RawEmailTemplate;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.utils.LogUtil;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -43,5 +44,14 @@ public abstract class EmailCommand {
 
     abstract EmailRequest generateRequest(User user, RawEmailTemplate emailTemplate);
 
-    abstract void setEmailMessage(MimeMessage message, EmailRequest request);
+    public void setEmailMessage(MimeMessage message, EmailRequest request) {
+        try {
+            message.setFrom(request.getFrom());
+            message.setRecipients(MimeMessage.RecipientType.TO, request.getRecipients());
+            message.setSubject(request.getSubject());
+            message.setContent(request.getContent(), "text/html; charset=utf-8");
+        } catch (MessagingException e) {
+            LogUtil.printLog("MESSAGE PROBLEM :", EmailCommand.class);
+        }
+    }
 }

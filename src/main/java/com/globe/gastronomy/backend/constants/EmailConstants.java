@@ -6,7 +6,8 @@ public enum EmailConstants {
     LASTNAME("${LASTNAME}"),
     PASSWORD_REFRESH_LINK("${PASSWORD_REFRESH_LINK}"),
     FORGOT_PASSWORD_TEMPLATE("forgotPassword"),
-    FORGOT_PASSWORD_SUBJECT("FORGOT PASSWORD LINK - Gastronomy Globe");
+    FORGOT_PASSWORD_SUBJECT("FORGOT PASSWORD LINK - Gastronomy Globe"),
+    WEEKLY_EMAIL_TEMPLATE("weeklyTemplate");
 
 
     private final String str;

@@ -49,6 +49,18 @@ public class UserService {
             LogUtil.printLog("USER-NOT-FOUND", UserService.class);
             throw new UserNotFoundException("USER NOT FOUND");
         }
+
+        return users;
+    }
+
+    public List<User> getUsers() throws UserNotFoundException {
+        List<User> users = userRepository.findAll();
+
+        if (users.isEmpty()) {
+            LogUtil.printLog("USER-NOT-FOUND", UserService.class);
+            throw new UserNotFoundException("USER NOT FOUND");
+        }
+
         return users;
     }
 

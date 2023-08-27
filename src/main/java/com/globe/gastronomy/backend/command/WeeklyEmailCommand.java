@@ -2,29 +2,26 @@ package com.globe.gastronomy.backend.command;
 
 import com.globe.gastronomy.backend.constants.EmailConstants;
 import com.globe.gastronomy.backend.email.EmailTemplate;
-import com.globe.gastronomy.backend.email.PasswordEmailTemplate;
+import com.globe.gastronomy.backend.email.WeeklyEmailTemplate;
 import com.globe.gastronomy.backend.model.RawEmailTemplate;
 import com.globe.gastronomy.backend.model.User;
 import com.globe.gastronomy.backend.service.EmailTemplateService;
-import com.globe.gastronomy.backend.utils.LogUtil;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class PasswordEmailCommand extends EmailCommand {
+public class WeeklyEmailCommand extends EmailCommand {
     private final EmailTemplateService emailTemplateService;
 
-    public PasswordEmailCommand(EmailTemplateService emailTemplateService) {
+    public WeeklyEmailCommand(EmailTemplateService emailTemplateService) {
         this.emailTemplateService = emailTemplateService;
     }
 
     @Override
     EmailTemplate getTemplate(String language) {
-        return new PasswordEmailTemplate(emailTemplateService);
+        return new WeeklyEmailTemplate(emailTemplateService);
     }
 
     @Override
@@ -32,13 +29,12 @@ public class PasswordEmailCommand extends EmailCommand {
         Map<String, String> tokens = new HashMap<>();
         tokens.put(EmailConstants.FIRSTNAME.getStr(), user.getFirstName());
         tokens.put(EmailConstants.LASTNAME.getStr(), user.getLastName());
-        tokens.put(EmailConstants.PASSWORD_REFRESH_LINK.getStr(), "https://www.google.com"); // TODO: 8/23/2023 IT WILL CHANGE
         return tokens;
     }
 
     @Override
     EmailRequest generateRequest(User user, RawEmailTemplate emailTemplate) {
-        return new PasswordEmailRequest("mahmutcelik1618@gmail.com", user.getEmail(), EmailConstants.FORGOT_PASSWORD_SUBJECT.getStr(), emailTemplate.getTemplateContent()); // TODO: 8/23/2023 FROM PART WILL CHANGE
-    }
+        return new WeeklyEmailRequest("mahmutcelik1618@gmail.com", user.getEmail(), EmailConstants.WEEKLY_EMAIL_TEMPLATE.getStr(), emailTemplate.getTemplateContent()); // TODO: 8/23/2023 FROM PART WILL CHANGE
 
+    }
 }
